@@ -1,0 +1,92 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/pcvelz/superpowers.git
+
+      - name: Fetch upstream
+        run: git fetch upstream main
+
+      - name: Check for new upstream commits
+        id: check
+        run: |
+          UPSTREAM=$(git rev-parse upstream/main)
+          MERGE_BASE=$(git merge-base HEAD upstream/main)
+          if [ "$MERGE_BASE" = "$UPSTREAM" ]; then
+            echo "already_up_to_date=true" >> "$GITHUB_OUTPUT"
+            echo "Already up to date with upstream."
+          else
+            echo "already_up_to_date=false" >> "$GITHUB_OUTPUT"
+            echo "Upstream has new commits."
+          fi
+
+      - name: Rebase on upstream
+        if: steps.check.outputs.already_up_to_date == 'false'
+        id: rebase
+        run: |
+          if git rebase upstream/main; then
+            echo "success=true" >> "$GITHUB_OUTPUT"
+          else
+            git rebase --abort
+            echo "success=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Rebase failed due to conflicts. Manual intervention required."
+          fi
+
+      - name: Push rebased changes
+        if: steps.check.outputs.already_up_to_date == 'false' && steps.rebase.outputs.success == 'true'
+        run: git push --force-with-lease
+
+      - name: Create issue on conflict
+        if: steps.check.outputs.already_up_to_date == 'false' && steps.rebase.outputs.success == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Upstream sync failed — rebase conflict';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'upstream-sync',
+            });
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: [
+                  'Automatic rebase on `pcvelz/superpowers:main` failed due to conflicts.',
+                  '',
+                  'Please resolve manually:',
+                  '```bash',
+                  'git fetch upstream main',
+                  'git rebase upstream/main',
+                  '# resolve conflicts',
+                  'git push --force-with-lease',
+                  '```',
+                ].join('\n'),
+                labels: ['upstream-sync'],
+              });
+            }
