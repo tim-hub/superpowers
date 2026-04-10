@@ -28,10 +28,10 @@ This fork enforces a specific development workflow on top of the upstream superp
 
 ```bash
 # Register marketplace
-claude plugin marketplace add chrisbobrowitz/superpowers
+claude plugin marketplace add tim-hub/superpowers
 
 # Install plugin
-claude plugin install superpowers-extended-cc@superpowers-extended-cc-marketplace
+claude plugin install spower@spower-marketplace
 ```
 
 ### Verify Installation
@@ -40,7 +40,7 @@ claude plugin install superpowers-extended-cc@superpowers-extended-cc-marketplac
 claude plugin list
 ```
 
-You should see `superpowers-extended-cc@superpowers-extended-cc-marketplace` listed and enabled.
+You should see `spower@spower-marketplace` listed and enabled.
 
 ## The Workflow
 
@@ -158,7 +158,7 @@ Opt in via `.claude/settings.local.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/plugins/marketplaces/superpowers-extended-cc-marketplace/hooks/examples/pre-commit-check-tasks.sh"
+            "command": "bash ~/.claude/plugins/marketplaces/spower-marketplace/hooks/examples/pre-commit-check-tasks.sh"
           }
         ]
       }
@@ -184,7 +184,7 @@ Opt in via `.claude/settings.local.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/plugins/marketplaces/superpowers-extended-cc-marketplace/hooks/examples/stop-deflection-guard.sh"
+            "command": "bash ~/.claude/plugins/marketplaces/spower-marketplace/hooks/examples/stop-deflection-guard.sh"
           }
         ]
       }
@@ -198,7 +198,7 @@ See the header of `hooks/examples/stop-deflection-guard.sh` for the full list of
 ## Updating
 
 ```bash
-claude plugin update superpowers-extended-cc@superpowers-extended-cc-marketplace
+claude plugin update spower@spower-marketplace
 ```
 
 ## Upstream
