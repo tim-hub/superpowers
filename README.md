@@ -31,7 +31,7 @@ This fork enforces a specific development workflow on top of the upstream superp
 claude plugin marketplace add tim-hub/superpowers
 
 # Install plugin
-claude plugin install spower@spower-marketplace
+claude plugin install spower@spower
 ```
 
 ### Verify Installation
