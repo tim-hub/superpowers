@@ -1,6 +1,7 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: "Executes a written implementation plan from disk with review checkpoints between tasks. Use when you have a plan file ready and need to implement it step by step."
+when_to_use: "execute plan, implement plan, run plan, plan file, implementation plan, follow plan"
 model: sonnet
 ---
 

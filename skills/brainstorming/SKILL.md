@@ -1,6 +1,7 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: "Explores user intent, requirements, and design through dialogue before any implementation. Use when creating features, building components, adding functionality, or modifying behavior."
+when_to_use: "new feature, new component, add functionality, modify behavior, before coding, design before implementation, requirements gathering, brainstorm"
 model: opus
 effort: max
 ---

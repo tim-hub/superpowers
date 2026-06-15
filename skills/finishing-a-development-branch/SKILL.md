@@ -1,6 +1,7 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+description: "Guides branch completion by presenting structured merge, PR, or cleanup options after verifying tests pass. Use when implementation is done and you need to decide how to integrate the work."
+when_to_use: "merge branch, open PR, finish feature, branch cleanup, integrate work, done implementing, complete feature, ship"
 model: sonnet
 effort: medium
 ---

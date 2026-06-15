@@ -1,6 +1,7 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
+description: "Establishes session-start skill discovery and enforces Skill tool invocation before any response. Use at the start of every conversation before doing anything else."
+when_to_use: "session start, conversation start, find skills, invoke skill, skill discovery, bootstrap, initialize session"
 ---
 
 <SUBAGENT-STOP>

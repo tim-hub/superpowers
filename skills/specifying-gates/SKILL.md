@@ -1,6 +1,7 @@
 ---
 name: specifying-gates
-description: Use when a user-gate task has requiresUserSpecification=true OR the agent's "do I know HOW?" self-check returns no. Locks down verification mechanics through a short AskUserQuestion sequence and writes the answers back into the task's metadata. Does NOT run the verification itself.
+description: "Clarifies ambiguous gate verification mechanics via AskUserQuestion and writes the result back into task metadata. Use when a gate task has requiresUserSpecification=true or the HOW of verification is unclear."
+when_to_use: "specify gate, gate verification, user gate, ambiguous acceptance criteria, requiresUserSpecification, specify-gate command"
 ---
 
 # Specifying User-Thrown Gates

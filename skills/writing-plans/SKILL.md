@@ -1,6 +1,7 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: "Writes a comprehensive bite-sized implementation plan covering files, code, tests, and docs before any code is written. Use when given a spec or requirements for a non-trivial multi-step task."
+when_to_use: "write plan, implementation plan, spec, requirements, multi-step task, plan before coding, create plan, planning"
 ---
 
 # Writing Plans

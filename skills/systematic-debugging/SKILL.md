@@ -1,6 +1,7 @@
 ---
 name: systematic-debugging
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+description: "Traces root cause before proposing fixes to avoid symptom patches that create new bugs. Use when encountering a bug, test failure, or unexpected behavior."
+when_to_use: "bug, test failure, unexpected behavior, debugging, root cause, fix error, investigate issue, broken, failing test, crash"
 ---
 
 # Systematic Debugging

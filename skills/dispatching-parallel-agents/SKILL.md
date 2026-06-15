@@ -1,6 +1,7 @@
 ---
 name: dispatching-parallel-agents
-description: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
+description: "Runs independent tasks concurrently by dispatching isolated subagents with precisely crafted context. Use when facing 2+ independent tasks with no shared state or sequential dependencies."
+when_to_use: "parallel tasks, concurrent work, multiple failures, independent tasks, dispatch subagents, parallelize, fan out"
 ---
 
 # Dispatching Parallel Agents

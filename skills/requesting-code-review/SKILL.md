@@ -1,6 +1,7 @@
 ---
 name: requesting-code-review
-description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+description: "Dispatches a reviewer subagent with isolated context to catch issues before they cascade. Use when completing tasks, implementing major features, or before merging."
+when_to_use: "code review, review work, before merge, verify implementation, review PR, review task, request review, check work"
 ---
 
 # Requesting Code Review

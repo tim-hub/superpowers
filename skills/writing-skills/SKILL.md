@@ -1,6 +1,7 @@
 ---
 name: writing-skills
-description: Use when creating new skills, editing existing skills, or verifying skills work before deployment
+description: "Applies TDD principles to skill authoring — baseline test, write skill, verify compliance, close loopholes. Use when creating, editing, or verifying a skill before deployment."
+when_to_use: "create skill, write skill, edit skill, new skill, SKILL.md, skill deployment, test skill, authoring skills"
 model: opus
 ---
 
@@ -94,19 +95,18 @@ skills/
 ## SKILL.md Structure
 
 **Frontmatter (YAML):**
-- Two required fields: `name` and `description` (see [agentskills.io/specification](https://agentskills.io/specification) for all supported fields)
-- Max 1024 characters total
+- Two key fields: `name` and `description`; add `when_to_use` for keyword coverage (see [agentskills.io/specification](https://agentskills.io/specification) for all supported fields)
+- Combined `description` + `when_to_use` capped at 1,536 characters in the skill listing
 - `name`: Use letters, numbers, and hyphens only (no parentheses, special chars)
-- `description`: Third-person, describes ONLY when to use (NOT what it does)
-  - Start with "Use when..." to focus on triggering conditions
-  - Include specific symptoms, situations, and contexts
-  - **NEVER summarize the skill's process or workflow** (see CSO section for why)
-  - Keep under 500 characters if possible
+- `description`: Third-person. One sentence saying what the skill does, then "Use when …" with the trigger conditions.
+  - Keep under 500 characters
+- `when_to_use`: Comma-separated trigger keywords and phrases Claude would naturally type or say
 
 ```markdown
 ---
 name: Skill-Name-With-Hyphens
-description: Use when [specific triggering conditions and symptoms]
+description: "Does X by doing Y. Use when [specific triggering conditions and symptoms]."
+when_to_use: "trigger phrase, synonym, symptom, related keyword"
 ---
 
 # Skill Name
@@ -142,60 +142,34 @@ Concrete results
 
 **Critical for discovery:** Future Claude needs to FIND your skill
 
-### 1. Rich Description Field
+### 1. Description + when_to_use
 
-**Purpose:** Claude reads description to decide which skills to load for a given task. Make it answer: "Should I read this skill right now?"
+**Purpose:** Claude reads `description` and `when_to_use` together to decide which skills to load. Both count toward the 1,536-character cap in the skill listing.
 
-**Format:** Start with "Use when..." to focus on triggering conditions
+**`description` format:** One sentence of what the skill does, followed by "Use when …" with the trigger condition.
 
-**CRITICAL: Description = When to Use, NOT What the Skill Does**
-
-The description should ONLY describe triggering conditions. Do NOT summarize the skill's process or workflow in the description.
-
-**Why this matters:** Testing revealed that when a description summarizes the skill's workflow, Claude may follow the description instead of reading the full skill content. A description saying "code review between tasks" caused Claude to do ONE review, even though the skill's flowchart clearly showed TWO reviews (spec compliance then code quality).
-
-When the description was changed to just "Use when executing implementation plans with independent tasks" (no workflow summary), Claude correctly read the flowchart and followed the two-stage review process.
-
-**The trap:** Descriptions that summarize workflow create a shortcut Claude will take. The skill body becomes documentation Claude skips.
+**`when_to_use` format:** Comma-separated trigger phrases — words Claude would type or a user would say when they need this skill. Synonyms, error keywords, and action phrases all belong here.
 
 ```yaml
-# ❌ BAD: Summarizes workflow - Claude may follow this instead of reading skill
-description: Use when executing plans - dispatches subagent per task with code review between tasks
+# ❌ BAD: No "what", just triggers
+description: Use when executing implementation plans with independent tasks
 
-# ❌ BAD: Too much process detail
-description: Use for TDD - write test first, watch it fail, write minimal code, refactor
+# ❌ BAD: Too much process detail in description (use when_to_use for keywords instead)
+description: "Use when executing plans - dispatches subagent per task with code review between tasks, spec check first then quality"
 
-# ✅ GOOD: Just triggering conditions, no workflow summary
-description: Use when executing implementation plans with independent tasks in the current session
+# ✅ GOOD: What it does + when to use + keyword list in when_to_use
+description: "Executes plan tasks via fresh isolated subagents with two-stage review after each. Use when executing an implementation plan with independent tasks."
+when_to_use: "execute plan, subagent tasks, implementation plan, task delegation, dispatch subagents, run tasks"
 
-# ✅ GOOD: Triggering conditions only
-description: Use when implementing any feature or bugfix, before writing implementation code
+# ✅ GOOD: Technology-specific skill
+description: "Handles authentication redirects in React Router. Use when routes need auth guards or redirect-on-login behavior."
+when_to_use: "React Router, auth redirect, protected route, login redirect, authentication guard"
 ```
 
-**Content:**
-- Use concrete triggers, symptoms, and situations that signal this skill applies
-- Describe the *problem* (race conditions, inconsistent behavior) not *language-specific symptoms* (setTimeout, sleep)
-- Keep triggers technology-agnostic unless the skill itself is technology-specific
-- If skill is technology-specific, make that explicit in the trigger
-- Write in third person (injected into system prompt)
-- **NEVER summarize the skill's process or workflow**
-
-```yaml
-# ❌ BAD: Too abstract, vague, doesn't include when to use
-description: For async testing
-
-# ❌ BAD: First person
-description: I can help you with async tests when they're flaky
-
-# ❌ BAD: Mentions technology but skill isn't specific to it
-description: Use when tests use setTimeout/sleep and are flaky
-
-# ✅ GOOD: Starts with "Use when", describes problem, no workflow
-description: Use when tests have race conditions, timing dependencies, or pass/fail inconsistently
-
-# ✅ GOOD: Technology-specific skill with explicit trigger
-description: Use when using React Router and handling authentication redirects
-```
+**Content rules:**
+- `description`: Third-person, one sentence what + one "Use when …" trigger
+- `when_to_use`: Concrete keywords — error messages, symptoms, tool names, synonyms
+- Keep triggers technology-agnostic in `description` unless the skill is technology-specific; put tech-specific keywords in `when_to_use`
 
 ### 2. Keyword Coverage
 
@@ -525,10 +499,11 @@ Make it easy for agents to self-check when rationalizing:
 
 ### Update CSO for Violation Symptoms
 
-Add to description: symptoms of when you're ABOUT to violate the rule:
+Add violation symptoms to `when_to_use` so Claude loads the skill precisely when an agent is about to break the rule:
 
 ```yaml
-description: use when implementing any feature or bugfix, before writing implementation code
+description: "Writes failing test first, then minimal code to pass, then refactors. Use when implementing any feature or bugfix."
+when_to_use: "TDD, test first, implement feature, bugfix, before writing code, red-green-refactor"
 ```
 
 ## RED-GREEN-REFACTOR for Skills
@@ -605,9 +580,9 @@ Deploying untested skills = deploying untested code. It's a violation of quality
 
 **GREEN Phase - Write Minimal Skill:**
 - [ ] Name uses only letters, numbers, hyphens (no parentheses/special chars)
-- [ ] YAML frontmatter with required `name` and `description` fields (max 1024 chars; see [spec](https://agentskills.io/specification))
-- [ ] Description starts with "Use when..." and includes specific triggers/symptoms
-- [ ] Description written in third person
+- [ ] YAML frontmatter with `name`, `description`, and `when_to_use` fields (see [spec](https://agentskills.io/specification); combined cap 1,536 chars)
+- [ ] `description`: one sentence what it does + "Use when …" trigger, written in third person
+- [ ] `when_to_use`: comma-separated trigger keywords — synonyms, error messages, symptoms, tool names
 - [ ] Keywords throughout for search (errors, symptoms, tools)
 - [ ] Clear overview with core principle
 - [ ] Address specific baseline failures identified in RED
