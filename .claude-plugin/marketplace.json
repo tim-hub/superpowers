@@ -5,6 +5,7 @@
     "name": "tim-hub",
     "email": "tim-hub@users.noreply.github.com"
   },
+  "version": "5.5.0",
   "plugins": [
     {
       "name": "superpowers-extended-cc",
