@@ -9,13 +9,13 @@
   },
   "contributors": [
     {
-      "name": "pcvelz",
-      "url": "https://github.com/pcvelz",
+      "name": "tim-hub",
+      "url": "https://github.com/tim-hub",
       "role": "Fork maintainer"
     }
   ],
-  "homepage": "https://github.com/pcvelz/superpowers",
-  "repository": "https://github.com/pcvelz/superpowers",
+  "homepage": "https://github.com/tim-hub/superpowers",
+  "repository": "https://github.com/tim-hub/superpowers",
   "license": "MIT",
   "keywords": [
     "skills",

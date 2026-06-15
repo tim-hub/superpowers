@@ -5,13 +5,13 @@
     "name": "tim-hub",
     "email": "tim-hub@users.noreply.github.com"
   },
-  "version": "5.5.0",
   "plugins": [
     {
       "name": "superpowers-extended-cc",
       "description": "Claude Code-specific fork of Superpowers with native task management and CC-specific enhancements",
       "version": "6.0.3-dev",
       "source": "./",
+      "strict": "false",
       "author": {
         "name": "tim-hub",
         "email": "tim-hub@users.noreply.github.com"

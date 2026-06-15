@@ -1,6 +1,6 @@
 {
   "name": "superpowers-extended-cc",
-  "version": "5.6.1",
+  "version": "5.5.1-dev",
   "description": "Claude Code-specific fork of Superpowers with native task management and CC-specific enhancements",
   "author": {
     "name": "Jesse Vincent",
@@ -9,13 +9,13 @@
   },
   "contributors": [
     {
-      "name": "pcvelz",
-      "url": "https://github.com/pcvelz",
+      "name": "tim-hub",
+      "url": "https://github.com/tim-hub",
       "role": "Fork maintainer"
     }
   ],
-  "homepage": "https://github.com/pcvelz/superpowers",
-  "repository": "https://github.com/pcvelz/superpowers",
+  "homepage": "https://github.com/tim-hub/superpowers",
+  "repository": "https://github.com/tim-hub/superpowers",
   "license": "MIT",
   "keywords": [
     "brainstorming",
