@@ -94,6 +94,8 @@ If the plan schedules questions for the user (a DECIDE list, an AskUserQuestion 
 
 ## Task Structure
 
+**TDD step order is mandatory for code-producing tasks.** Steps MUST be ordered: write the failing test, run it and observe the failure, write the minimal implementation, run the test and observe it pass, then commit. Tasks that produce code without this ordering are plan failures.
+
 ````markdown
 ### Task N: [Component Name]
 
@@ -154,6 +156,7 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
 - Steps that describe what to do without showing how (code blocks required for code steps)
 - References to types, functions, or methods not defined in any task
+- Type suppression directives (`// @ts-ignore`, `// @ts-expect-error`, `# type: ignore`, `@SuppressWarnings`, or `any` casts used to escape type errors) — fix the underlying type, do not silence the checker
 
 ## Remember
 - Exact file paths always

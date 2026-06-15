@@ -93,6 +93,23 @@ When dispatching an implementer subagent:
 1. Read the task's description via TaskGet — metadata is embedded as a `json:metadata` code fence at the end
 2. Parse the metadata JSON and map fields (files, acceptanceCriteria, verifyCommand) to the implementer prompt sections
 3. The implementer should receive ALL structured data — don't make them parse it from prose
+4. Capture the current HEAD SHA (`git rev-parse HEAD`) as the pre-task SHA before dispatching — required for plan drift detection after the subagent completes
+
+## Plan Drift Detection
+
+After the implementer subagent reports DONE (and before dispatching reviewers / marking the task complete), verify that the subagent only touched files inside the task's declared scope.
+
+1. Run `git diff --name-only <pre-task-sha>` to enumerate every file touched since the pre-task SHA.
+2. Compare touched files against the task metadata's `files` list (the declared scope).
+3. Filter touched files against the **default drift allowlist** for transient files:
+   - Lock files: `*.lock`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `Cargo.lock`, `poetry.lock`, `uv.lock`, `Gemfile.lock`, `composer.lock`
+   - Python package markers: `__init__.py`
+   - Generated index files: `index.ts`, `index.js`, `mod.rs` when used purely as re-exports
+4. Honor a project-level `driftAllowlist` key in `CLAUDE.md` (array of glob patterns) that extends the default allowlist.
+5. **If files outside the scope+allowlist were modified:** re-dispatch the same implementer with explicit instructions to revert the out-of-scope changes (list them by path) and keep only the in-scope work. Do NOT proceed to spec review until drift is cleared.
+6. **If drift occurs a second time** on the same task: `git reset --hard <pre-task-sha>` and escalate to the human partner — the plan or the model is mis-scoped and needs human judgement.
+
+Only after drift detection passes do you proceed to the spec reviewer dispatch.
 
 ## Model Selection
 

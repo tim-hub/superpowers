@@ -110,6 +110,24 @@ Do NOT just increase timeouts - find the real issue.
 Return: Summary of what you found and what you fixed.
 ```
 
+## Skill Manifest for Dispatched Subagents
+
+Every parallel-dispatched subagent prompt MUST include a curated manifest of the **execution-phase skills** it is allowed to invoke. This bounds the subagent to skills appropriate for doing work, and explicitly excludes orchestration/dispatch skills to prevent recursive dispatch (subagents spawning more subagents).
+
+**Allowed (include in every dispatched prompt):**
+- `superpowers-extended-cc:test-driven-development`
+- `superpowers-extended-cc:systematic-debugging`
+- `superpowers-extended-cc:verification-before-completion`
+- `superpowers-extended-cc:writing-plans`
+
+**Explicitly excluded (do NOT permit in dispatched subagents):**
+- `superpowers-extended-cc:dispatching-parallel-agents`
+- `superpowers-extended-cc:subagent-driven-development`
+- `superpowers-extended-cc:executing-plans`
+- Any other orchestration / dispatch skill
+
+Embed the allowed manifest verbatim in the dispatched prompt — name the four skills the subagent may invoke and state that orchestration skills are off-limits.
+
 ## Common Mistakes
 
 **❌ Too broad:** "Fix all the tests" - agent gets lost
