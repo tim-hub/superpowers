@@ -11,7 +11,6 @@
       "description": "Claude Code-specific fork of Superpowers with native task management and CC-specific enhancements",
       "version": "6.0.2",
       "source": "./",
-      "strict": "false",
       "author": {
         "name": "tim-hub",
         "email": "tim-hub@users.noreply.github.com"
