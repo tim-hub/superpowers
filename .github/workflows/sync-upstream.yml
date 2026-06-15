@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  issues: write
 
 jobs:
   sync:
@@ -44,11 +43,31 @@ jobs:
       - name: Rebase on upstream
         if: steps.check.outputs.already_up_to_date == 'false'
         run: |
-          if ! git rebase upstream/main; then
-            git rebase --abort
-            echo "::error::Rebase failed due to conflicts. Resolve manually: git fetch upstream && git rebase upstream/main"
-            exit 1
-          fi
+          git rebase upstream/main || {
+            if git status --porcelain | grep -q "^DU .claude-plugin/plugin.json"; then
+              git rm .claude-plugin/plugin.json
+              GIT_EDITOR=true git rebase --continue
+            else
+              git rebase --abort
+              echo "::error::Unexpected rebase conflict. Resolve manually: git fetch upstream && git rebase upstream/main"
+              exit 1
+            fi
+          }
+
+      - name: Apply fork identity overlay
+        if: steps.check.outputs.already_up_to_date == 'false'
+        run: |
+          for f in .cursor-plugin/plugin.json .codex-plugin/plugin.json; do
+            [ -f "$f" ] || continue
+            jq '
+              .name = "superpowers-extended-cc" |
+              .displayName = "Superpowers Extended CC" |
+              .homepage = "https://github.com/tim-hub/superpowers" |
+              .repository = "https://github.com/tim-hub/superpowers"
+            ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+          done
+          git diff --quiet || git commit -am "chore: reapply fork identity overlay"
+
       - name: Push rebased changes
         if: steps.check.outputs.already_up_to_date == 'false'
         run: git push origin HEAD:main --force-with-lease
