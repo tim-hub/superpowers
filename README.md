@@ -1,6 +1,6 @@
 # Superpowers Extended for Claude Code
 
-A community-maintained fork of [obra/superpowers](https://github.com/obra/superpowers) specifically for Claude Code users.
+A community-maintained fork of [pcvelz/superpowers](https://github.com/pcvelz/superpowers) specifically for Claude Code users.
 
 ## Why This Fork Exists
 
