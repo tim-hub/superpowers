@@ -1,6 +1,6 @@
 {
   "name": "superpowers-extended-cc",
-  "version": "5.4.0",
+  "version": "5.6.1",
   "description": "Claude Code-specific fork of Superpowers with native task management and CC-specific enhancements",
   "author": {
     "name": "Jesse Vincent",
@@ -36,11 +36,7 @@
     "longDescription": "Use Superpowers Extended CC to guide agent work through brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, and finish-the-branch workflows. Claude Code-specific fork with native task management.",
     "developerName": "pcvelz (fork of Jesse Vincent's Superpowers)",
     "category": "Coding",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Read", "Write"],
     "defaultPrompt": [
       "I've got an idea for something I'd like to build.",
       "Let's add a feature to this project."
