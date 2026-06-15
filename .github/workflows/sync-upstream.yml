@@ -66,7 +66,22 @@ jobs:
               .repository = "https://github.com/tim-hub/superpowers"
             ' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
           done
-          git diff --quiet || git commit -am "chore: reapply fork identity overlay"
+          # Restore .claude-plugin/plugin.json (fork deleted it; upstream still owns it)
+          VERSION=$(jq -r '.version' .cursor-plugin/plugin.json)
+          jq -n \
+            --arg version "$VERSION" \
+            '{
+              name: "superpowers-extended-cc",
+              description: "Claude Code-specific fork of Superpowers with native task management and CC-specific enhancements",
+              version: $version,
+              author: {name: "tim-hub", email: "tim-hub@users.noreply.github.com"},
+              homepage: "https://github.com/tim-hub/superpowers",
+              repository: "https://github.com/tim-hub/superpowers",
+              license: "MIT",
+              keywords: ["skills","tdd","debugging","collaboration","best-practices","workflows","claude-code","native-tasks"]
+            }' > .claude-plugin/plugin.json
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: reapply fork identity overlay"
 
       - name: Push rebased changes
         if: steps.check.outputs.already_up_to_date == 'false'
