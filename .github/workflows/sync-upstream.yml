@@ -43,47 +43,12 @@ jobs:
           fi
       - name: Rebase on upstream
         if: steps.check.outputs.already_up_to_date == 'false'
-        id: rebase
         run: |
-          if git rebase upstream/main; then
-            echo "success=true" >> "$GITHUB_OUTPUT"
-          else
+          if ! git rebase upstream/main; then
             git rebase --abort
-            echo "success=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Rebase failed due to conflicts. Manual intervention required."
+            echo "::error::Rebase failed due to conflicts. Resolve manually: git fetch upstream && git rebase upstream/main"
+            exit 1
           fi
       - name: Push rebased changes
-        if: steps.check.outputs.already_up_to_date == 'false' && steps.rebase.outputs.success == 'true'
-        run: git push --force-with-lease
-
-      - name: Create issue on conflict
-        if: steps.check.outputs.already_up_to_date == 'false' && steps.rebase.outputs.success == 'false'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = 'Upstream sync failed — rebase conflict';
-            const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              labels: 'upstream-sync',
-            });
-            if (issues.length === 0) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title,
-                body: [
-                  'Automatic rebase on `pcvelz/superpowers:main` failed due to conflicts.',
-                  '',
-                  'Please resolve manually:',
-                  '```bash',
-                  'git fetch upstream main',
-                  'git rebase upstream/main',
-                  '# resolve conflicts',
-                  'git push --force-with-lease',
-                  '```',
-                ].join('\n'),
-                labels: ['upstream-sync'],
-              });
-            }
+        if: steps.check.outputs.already_up_to_date == 'false'
+        run: git push origin HEAD:main --force-with-lease
