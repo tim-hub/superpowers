@@ -62,7 +62,7 @@ This fork integrates Claude Code-native features into the Superpowers workflow.
 
 ```bash
 # Register marketplace
-/plugin marketplace add pcvelz/superpowers
+/plugin marketplace add tim-hub/superpowers
 
 # Install plugin
 /plugin install superpowers-extended-cc@superpowers-extended-cc-marketplace
@@ -71,7 +71,7 @@ This fork integrates Claude Code-native features into the Superpowers workflow.
 ### Option 2: Direct URL
 
 ```bash
-/plugin install --source url https://github.com/pcvelz/superpowers.git
+/plugin install --source url https://github.com/tim-hub/superpowers.git
 ```
 
 ### Stay Updated (recommended)
